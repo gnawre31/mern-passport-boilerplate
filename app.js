@@ -18,6 +18,7 @@ const passport = require("passport");
 const expressStatusMonitor = require("express-status-monitor");
 const sass = require("node-sass-middleware");
 const multer = require("multer");
+const cors = require("cors");
 
 // const upload = multer({ dest: path.join(__dirname, "uploads") });
 
@@ -44,6 +45,8 @@ const passportConfig = require("./config/passport");
  */
 const app = express();
 
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
 /**
  * Connect to MongoDB.
  */
@@ -66,8 +69,8 @@ mongoose.connection.on("error", (err) => {
  */
 app.set("host", process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0");
 app.set("port", process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8081);
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "pug");
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(
@@ -94,14 +97,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req, res, next) => {
-  if (req.path === "/api/upload") {
-    // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
-});
+// app.use((req, res, next) => {
+//   if (req.path === "/api/upload") {
+//     // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
+//     next();
+//   } else {
+//     lusca.csrf()(req, res, next);
+//   }
+// });
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 app.disable("x-powered-by");
@@ -127,54 +130,54 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use(
-  "/",
-  express.static(path.join(__dirname, "public"), { maxAge: 31557600000 })
-);
-app.use(
-  "/js/lib",
-  express.static(path.join(__dirname, "node_modules/chart.js/dist"), {
-    maxAge: 31557600000,
-  })
-);
-app.use(
-  "/js/lib",
-  express.static(path.join(__dirname, "node_modules/popper.js/dist/umd"), {
-    maxAge: 31557600000,
-  })
-);
-app.use(
-  "/js/lib",
-  express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"), {
-    maxAge: 31557600000,
-  })
-);
-app.use(
-  "/js/lib",
-  express.static(path.join(__dirname, "node_modules/jquery/dist"), {
-    maxAge: 31557600000,
-  })
-);
-app.use(
-  "/webfonts",
-  express.static(
-    path.join(__dirname, "node_modules/@fortawesome/fontawesome-free/webfonts"),
-    { maxAge: 31557600000 }
-  )
-);
+// app.use(
+//   "/",
+//   express.static(path.join(__dirname, "public"), { maxAge: 31557600000 })
+// );
+// app.use(
+//   "/js/lib",
+//   express.static(path.join(__dirname, "node_modules/chart.js/dist"), {
+//     maxAge: 31557600000,
+//   })
+// );
+// app.use(
+//   "/js/lib",
+//   express.static(path.join(__dirname, "node_modules/popper.js/dist/umd"), {
+//     maxAge: 31557600000,
+//   })
+// );
+// app.use(
+//   "/js/lib",
+//   express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"), {
+//     maxAge: 31557600000,
+//   })
+// );
+// app.use(
+//   "/js/lib",
+//   express.static(path.join(__dirname, "node_modules/jquery/dist"), {
+//     maxAge: 31557600000,
+//   })
+// );
+// app.use(
+//   "/webfonts",
+//   express.static(
+//     path.join(__dirname, "node_modules/@fortawesome/fontawesome-free/webfonts"),
+//     { maxAge: 31557600000 }
+//   )
+// );
 
 /**
  * Primary app routes.
  */
 app.get("/", homeController.index);
-app.get("/login", userController.getLogin);
+// app.get("/login", userController.getLogin);
 app.post("/login", userController.postLogin);
 app.get("/logout", userController.logout);
-app.get("/forgot", userController.getForgot);
+// app.get("/forgot", userController.getForgot);
 app.post("/forgot", userController.postForgot);
 app.get("/reset/:token", userController.getReset);
 app.post("/reset/:token", userController.postReset);
-app.get("/signup", userController.getSignup);
+// app.get("/signup", userController.getSignup);
 app.post("/signup", userController.postSignup);
 app.get("/contact", contactController.getContact);
 app.post("/contact", contactController.postContact);

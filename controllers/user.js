@@ -17,9 +17,10 @@ exports.getLogin = (req, res) => {
   if (req.user) {
     return res.redirect("/");
   }
-  res.render("account/login", {
-    title: "Login",
-  });
+  // res.render("account/login", {
+  //   title: "Login",
+  // });
+  console.log("login");
 };
 
 /**
@@ -81,9 +82,10 @@ exports.getSignup = (req, res) => {
   if (req.user) {
     return res.redirect("/");
   }
-  res.render("account/signup", {
-    title: "Create Account",
-  });
+  // res.render("account/signup", {
+  //   title: "Create Account",
+  // });
+  console.log("signup");
 };
 
 /**
@@ -91,6 +93,7 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
+  console.log(req.body);
   const validationErrors = [];
   if (!validator.isEmail(req.body.email))
     validationErrors.push({ msg: "Please enter a valid email address." });
@@ -147,9 +150,10 @@ exports.postSignup = (req, res, next) => {
  * Profile page.
  */
 exports.getAccount = (req, res) => {
-  res.render("account/profile", {
-    title: "Account Management",
-  });
+  // res.render("account/profile", {
+  //   title: "Account Management",
+  // });
+  console.log("view profile");
 };
 
 /**
@@ -318,9 +322,10 @@ exports.getReset = (req, res, next) => {
         });
         return res.redirect("/forgot");
       }
-      res.render("account/reset", {
-        title: "Password Reset",
-      });
+      // res.render("account/reset", {
+      //   title: "Password Reset",
+      // });
+      console.log("reset account");
     });
 };
 
@@ -593,9 +598,10 @@ exports.getForgot = (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   }
-  res.render("account/forgot", {
-    title: "Forgot Password",
-  });
+  // res.render("account/forgot", {
+  //   title: "Forgot Password",
+  // });
+  console.log("forgot password");
 };
 
 /**
